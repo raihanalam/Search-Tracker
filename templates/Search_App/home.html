@@ -16,6 +16,7 @@
                {% csrf_token %}
                <button type="submit">Search</button>
           </form>
+          <br>
      </center>
           <div class="row">
                <div class="col-md-4">
@@ -23,29 +24,28 @@
                     <h3>All Keywords</h3>
                     {% for keyword in all_keywords %}
                          <h6 style="text-align: left;"></h6>
-                         <input type="checkbox" class="keyword" name="keyword" value="{{keyword.key}}">
-                         <label for="keyword">{{keyword.key}} &nbsp;({{keyword.count}} times found)</label><br>
+                         <input type="checkbox" id="{{keyword.key}}" class="keyword" name="keyword" value="{{keyword.key}}">
+                         <label for="{{keyword.key}}">{{keyword.key}} &nbsp;({{keyword.count}} times found)</label><br>
                     {% endfor %}
                     <br>
                     <h3>All Users</h3>
                     {% for user in all_users %}
-                         <input type="checkbox" class="user" name="user" value="{{user.username}}">
+                         <input type="checkbox" id="{{user.username}}}}" class="user" name="user" value="{{user.username}}">
                          <label for="{{user.username}}">{{user.username}}</label><br>
                     {% endfor %}
                     <br>
                     <h3>Time Range:</h3>
-                    <input type="checkbox" class="time" name="time" value="1">
-                    <label for="time">See data from yesterday</label><br>
-                    <input type="checkbox" class="time" name="time" value="7">
-                    <label for="time">See data from last week</label><br>
-                    <input type="checkbox" class="time" name="time" value="30">
-                    <label for="time">See data from last month</label><br>
+                    <input type="checkbox" id="1" class="time" name="time" value="1">
+                    <label for="1">See data from yesterday</label><br>
+                    <input type="checkbox" id="7" class="time" name="time" value="7">
+                    <label for="7">See data from last week</label><br>
+                    <input type="checkbox" id="30" class="time" name="time" value="30">
+                    <label for="30">See data from last month</label><br>
                     
                     <br>
                     <h3>Select Date:</h3>
-                    <input type="text" placeholder="Start Date">
-                    <input type="text" placeholder="End Date">
-
+                         <input type="datetime" id ="start-date" name = "start-date" placeholder="Start Date">
+                         <input type="datetime" id="end-date" name = "end-date" placeholder="End Date">
                     <br>
                     <br>
                     <button onclick="myfilter()">Filter</button>
@@ -67,7 +67,13 @@
                var user = Array.prototype.slice.call(document.querySelectorAll('.user:checked')).map(function(el){
                return el.value;
                }).join(',');
-               
+               var time_range = Array.prototype.slice.call(document.querySelectorAll('.time:checked')).map(function(el){
+               return el.value;
+               }).join(',');
+
+               var start_date = document.getElementById('start-date').value;
+               var end_date = document.getElementById('end-date').value;
+
 
                $.ajax({
                     type: "GET",
@@ -75,18 +81,19 @@
                     data: {
                     "keyword": keyword,
                     "users": user,
+                    "times": time_range,
                     },
                     dataType: "json",
-                    success: function (data) {
+                    success: function (data){
                     
+                    var data = data.all_search_data
                     var div = document.getElementById('filter-out');
-                    div.innerHTML = "";
-                    for(var i=0; i< data.all_search_data.length; i++){
+                    div.innerHTML = "Found ("+data.length+') filterd results';
+                    for(var i=0; i< data.length; i++){
                          
-                         console.log(data.all_search_data[i].fields.keyword)
-                         div.innerHTML = div.innerHTML + "<p class='inner' id="+i+">"+  data.all_search_data[i].fields.user +"<br>"+ data.all_search_data[i].fields.keyword + "<br>" + data.all_search_data[i].fields.browser +"<br>"+ data.all_search_data[i].fields.time + "<br>" + "</p>" + "<br><br>";
+                         console.log(data[i].fields.keyword)
+                         div.innerHTML = div.innerHTML + "<p class='inner' id="+i+">"+  data[i].fields.user +"<br>"+ data[i].fields.keyword + "<br>" + data[i].fields.browser +"<br>"+ data[i].fields.time + "<br>" + "</p>" + "<br><br>";
                     }
-                    
                     
                     },
                     failure: function () {
