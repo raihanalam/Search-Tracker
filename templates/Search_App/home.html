@@ -92,7 +92,7 @@
                     for(var i=0; i< data.length; i++){
                          
                          console.log(data[i].fields.keyword)
-                         div.innerHTML = div.innerHTML + "<p class='inner' id="+i+">"+  data[i].fields.user +"<br>"+ data[i].fields.keyword + "<br>" + data[i].fields.browser +"<br>"+ data[i].fields.time + "<br>" + "</p>" + "<br><br>";
+                         div.innerHTML = div.innerHTML + "<p class='inner' id="+i+">User: "+data[i].fields.user +"<br> Keyword: "+ data[i].fields.keyword + "<br>Ip: "+ data[i].fields.ip+ "<br>Browser: " + data[i].fields.browser +"<br> Date: "+ data[i].fields.time + "<br>" + "</p>" + "<br><br>";
                     }
                     
                     },

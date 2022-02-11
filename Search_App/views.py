@@ -14,11 +14,14 @@ def home(request):
      if request.method == 'POST':
           keyword = request.POST.get('keyword')
           user = request.user
+          user_ip = visitor_ip_address(request)
           browser = request.META['HTTP_USER_AGENT']
+
 
           new_ob = Search_History()
           new_ob.user = user
           new_ob.keyword = keyword
+          new_ob.ip = user_ip
           new_ob.browser = browser
           new_ob.save() 
 
@@ -46,7 +49,14 @@ def home(request):
          
      return render(request,'Search_App/home.html', context={'all_users':all_users,'all_keywords':all_single_keys,})
 
-
+def visitor_ip_address(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+    
 def filter(request):
 
      #Any process that you want
@@ -145,3 +155,4 @@ def filter(request):
           'all_search_data': search_new
      }
      return JsonResponse(data)
+
