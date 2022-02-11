@@ -49,6 +49,8 @@
                     <br>
                     <br>
                     <button onclick="myfilter()">Filter</button>
+                    <br>
+                    <br>
                </div>
                <div class="col-md-8">
                     <div id="filter-out">
@@ -61,6 +63,7 @@
      <script>
 
           function myfilter(){
+
                var keyword = Array.prototype.slice.call(document.querySelectorAll('.keyword:checked')).map(function(el){
                return el.value;
                }).join(',');
@@ -91,7 +94,6 @@
                     div.innerHTML = "Found ("+data.length+') filterd results';
                     for(var i=0; i< data.length; i++){
                          
-                         console.log(data[i].fields.keyword)
                          div.innerHTML = div.innerHTML + "<p class='inner' id="+i+">User: "+data[i].fields.user +"<br> Keyword: "+ data[i].fields.keyword + "<br>Ip: "+ data[i].fields.ip+ "<br>Browser: " + data[i].fields.browser +"<br> Date: "+ data[i].fields.time + "<br>" + "</p>" + "<br><br>";
                     }
                     

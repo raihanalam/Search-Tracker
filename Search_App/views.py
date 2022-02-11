@@ -1,5 +1,3 @@
-from lib2to3.pgen2.token import GREATER
-from time import time
 from django.shortcuts import render
 from .models import Search_History
 from django.contrib.auth.models import User
@@ -8,18 +6,21 @@ from django.http import JsonResponse
 from django.core import serializers
 from datetime import datetime, timedelta
 from django.utils import timezone
+
 # Create your views here.
 
 def home(request):
      if request.method == 'POST':
           keyword = request.POST.get('keyword')
-          user = request.user
           user_ip = visitor_ip_address(request)
           browser = request.META['HTTP_USER_AGENT']
 
-
           new_ob = Search_History()
-          new_ob.user = user
+          try:
+               user = request.user
+               new_ob.user = user
+          except:
+               print('Unknown user')
           new_ob.keyword = keyword
           new_ob.ip = user_ip
           new_ob.browser = browser
@@ -99,7 +100,7 @@ def filter(request):
           start_date = datetime.date(range_time)
           end_date = datetime.date(now_datetime)
      except:
-          print("Something error!")
+          print("Some value my not filled!")
 
      myUser = User.objects.filter(username__in = user_list)
 
